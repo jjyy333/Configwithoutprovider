@@ -91,7 +91,7 @@
       { "tag": "🍎 苹果服务", "type": "selector", "outbounds": [ "🎯 全球直连", "🛫 Pithecia", "🛫 游隼云", "♻️ 自动选择", "🛫 自动咸鱼", "🚀 节点选择" ] },
       { "tag": "🎵 TikTok", "type": "selector", "outbounds": [ "🚀 节点选择", "🛫 Pithecia", "🛫 游隼云", "🛫 自动咸鱼", "🇬🇧 英国节点", "🇺🇸 美国节点", "🇯🇵 日韩节点", "🇸🇬 新加坡节点", "🎯 全球直连" ] },
       // { "tag": "🔒 私有网络", "type": "selector", "outbounds": [ "DIRECT" ] },
-      { "tag": "🛑 广告拦截", "type": "selector", "outbounds": [ "REJECT", "DIRECT" ] },
+      { "tag": "🛑 广告拦截", "type": "selector", "outbounds": [ "REJECT", "DIRECT", "🚀 节点选择" ] },
       { "tag": "🎯 全球直连", "type": "selector", "outbounds": [ "DIRECT", "REJECT", "🛫 游隼云", "🛫 Pithecia", "🛫 自动咸鱼", "♻️ 自动选择" ] },
       { "tag": "🛫 游隼云", "type": "selector", "providers": [ "🛫 游隼云机场" ] },
       { "tag": "🛫 Pithecia", "type": "urltest", "tolerance": 50, "interval": "2m", "providers": [ "🛫 Pithecia机场" ] },
