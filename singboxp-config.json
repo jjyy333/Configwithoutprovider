@@ -5,10 +5,16 @@
       "timestamp": true
   },
   "dns": {
+    "hosts": {
+      "doh.pub": [ "1.12.12.12", "120.53.53.53", "2402:4e00::" ],
+      "dns.alidns.com": [ "223.5.5.5", "223.6.6.6", "2400:3200::1", "2400:3200:baba::1" ],
+      "dns.google": [ "8.8.8.8", "8.8.4.4", "2001:4860:4860::8888", "2001:4860:4860::8844" ],
+      "cloudflare-dns.com": [ "1.1.1.1", "1.0.0.1", "2606:4700:4700::1111", "2606:4700:4700::1001" ]
+    },
     "servers": [
       { "tag": "dns_block", "address": "rcode://success" },
       { "tag": "dns_direct", "address": [ "https://doh.pub/dns-query", "https://dns.alidns.com/dns-query" ], "detour": "DIRECT" },
-      { "tag": "dns_proxy", "address": [ "https://dns.google/dns-query", "https://cloudflare-dns.com/dns-query" ], "client_subnet": "183.234.215.11" },
+      { "tag": "dns_proxy", "address": [ "https://dns.google/dns-query", "https://cloudflare-dns.com/dns-query" ], "client_subnet": "47.106.208.135" },
       { "tag": "dns_fakeip", "address": "fakeip" }
     ],
     "rules": [
@@ -16,9 +22,9 @@
       { "clash_mode": "Direct", "query_type": [ "A", "AAAA" ], "server": "dns_direct" },
       { "clash_mode": "Global", "query_type": [ "A", "AAAA" ], "server": "dns_proxy" },
       { "rule_set": [ "ads" ], "server": "dns_block", "disable_cache": true, "rewrite_ttl": 0 },
-      { "rule_set": [ "proxy", "google-cn" ], "query_type": [ "A", "AAAA" ], "server": "dns_fakeip", "rewrite_ttl": 1 },
-      { "rule_set": [ "cnip", "cn" ], "query_type": [ "A", "AAAA" ], "server": "dns_direct" },
-      { "fallback_rules": [ { "rule_set": [ "cnip", "cn" ], "server": "dns_direct" }, { "match_all": true, "server": "dns_fakeip", "rewrite_ttl": 1 } ], "server": "dns_proxy" }
+      { "rule_set": [ "proxy" ], "query_type": [ "A", "AAAA" ], "server": "dns_fakeip", "rewrite_ttl": 1 },
+      { "rule_set": [ "cn" ], "query_type": [ "A", "AAAA" ], "server": "dns_direct" },
+      { "fallback_rules": [ { "rule_set": [ "cnip" ], "server": "dns_direct" }, { "match_all": true, "server": "dns_fakeip", "rewrite_ttl": 1 } ], "server": "dns_proxy" }
     ],
     "final": "dns_direct",
     "strategy": "prefer_ipv4",
@@ -30,7 +36,7 @@
       "enabled": true,
       "inet4_range": "198.18.0.0/15",
       "inet6_range": "fc00::/18",
-      "exclude_rule": { "rule_set": [ "fakeip-filter" ] }
+      "exclude_rule": { "rule_set": [ "fakeip-filter", "private" ] }
     }
   },
   "inbounds": [
@@ -70,26 +76,24 @@
       { "tag": "REJECT", "type": "block" },
       { "tag": "GLOBAL", "type": "selector", "outbounds": [ "DIRECT", "🚀 节点选择", "REJECT" ] },
       { "tag": "dns-out", "type": "dns" },
-
       { "tag": "🎮 任天堂", "type": "selector", "outbounds": [ "🎯 全球直连", "♻️ 自动选择", "🛫 Pithecia", "🛫 自动咸鱼", "🛫 游隼云", "🚀 节点选择", "🌐自建hy2" ] },
       { "tag": "🐟 漏网之鱼", "type": "selector", "outbounds": [ "🛫 自动咸鱼", "🎯 全球直连", "🛫 Pithecia", "♻️ 自动选择", "🛫 游隼云", "🚀 节点选择" ] },
-      { "tag": "🚀 节点选择", "type": "selector", "default": "♻️ 自动选择", "outbounds": [ "♻️ 自动选择", "🛫 自动咸鱼", "🛫 游隼云", "🛫 Pithecia", "🇸🇬 新加坡节点", "🇭🇰 香港节点", "🌐自建hy2", "🌐美国9929", "🇹🇼 台湾节点", "🇯🇵 日韩节点", "🇬🇧 英国节点", "🇺🇸 美国节点", "🎯 全球直连" ] },
-      { "tag": "♻️ 自动选择", "type": "urltest", "tolerance": 50, "use_all_providers": true, "outbounds": [ "🌐美国9929" ] },
+      { "tag": "🚀 节点选择", "type": "selector", "outbounds": [ "♻️ 自动选择", "🛫 自动咸鱼", "🛫 游隼云", "🛫 Pithecia", "🇸🇬 新加坡节点", "🇭🇰 香港节点", "🌐自建hy2", "🌐美国9929", "🇹🇼 台湾节点", "🇯🇵 日韩节点", "🇬🇧 英国节点", "🇺🇸 美国节点", "🎯 全球直连" ] },
+      { "tag": "♻️ 自动选择", "type": "urltest", "tolerance": 50,"interval": "1m", "use_all_providers": true, "outbounds": [ "🌐美国9929" ] },
       { "tag": "🔍 谷歌服务", "type": "selector", "outbounds": [ "♻️ 自动选择", "🛫 游隼云", "🛫 Pithecia", "🛫 自动咸鱼", "🚀 节点选择", "🎯 全球直连" ] },
-      { "tag": "🤖 人工智能", "type": "selector", "outbounds": [ "🚀 节点选择", "🛫 游隼云", "🇭🇰 香港节点", "🇹🇼 台湾节点", "🇯🇵 日韩节点","🇸🇬 新加坡节点", "🇺🇸 美国节点" ] },
-      { "tag": "📺 youtube", "type": "selector", "outbounds": [ "🛫 自动咸鱼", "🛫 Pithecia", "🛫 游隼云", "🌐自建hy2", "🌐美国9929", "♻️ 自动选择", "🇭🇰 香港节点", "🇹🇼 台湾节点", "🇯🇵 日韩节点","🇸🇬 新加坡节点", "🇺🇸 美国节点" ] },
-      { "tag": "🪜 被墙域名", "type": "selector", "default": "♻️ 自动选择", "outbounds": [ "♻️ 自动选择", "🛫 自动咸鱼", "🛫 Pithecia", "🛫 游隼云",  "🚀 节点选择", "🎯 全球直连" ] },
-      { "tag": "📲 电报消息", "type": "selector", "outbounds": [ "🛫 游隼云", "🛫 Pithecia", "🌐自建hy2", "🌐美国9929", "🇸🇬 新加坡节点", "🛫 自动咸鱼", "🚀 节点选择" ] },
-      { "tag": "🪟 微软服务", "type": "selector", "outbounds": [ "🎯 全球直连", "🌐美国9929", "🛫 Pithecia", "🛫 游隼云", "♻️ 自动选择", "🛫 自动咸鱼", "🚀 节点选择" ] },
-      { "tag": "🍎 苹果服务", "type": "selector", "outbounds": [ "🎯 全球直连", "🛫 Pithecia", "🛫 游隼云", "♻️ 自动选择", "🛫 自动咸鱼", "🚀 节点选择" ] },
-      { "tag": "🎵 TikTok", "type": "selector", "outbounds": [ "🚀 节点选择", "🛫 Pithecia", "🛫 游隼云", "🛫 自动咸鱼", "🇬🇧 英国节点", "🇺🇸 美国节点", "🇯🇵 日韩节点", "🇸🇬 新加坡节点", "🎯 全球直连" ] },
-      // { "tag": "🔒 私有网络", "type": "selector", "outbounds": [ "DIRECT" ] },
+      { "tag": "🤖 人工智能", "type": "selector", "outbounds": [ "🇸🇬 新加坡节点", "🇯🇵 日韩节点", "🇺🇸 美国节点", "🚀 节点选择", "🛫 游隼云" ] },
+      { "tag": "📺 youtube", "type": "selector", "outbounds": [ "🛫 自动咸鱼", "🛫 Pithecia", "🛫 游隼云", "🌐自建hy2", "🌐美国9929", "🚀 节点选择", "♻️ 自动选择" ] },
+      { "tag": "🪜 被墙域名", "type": "selector", "outbounds": [ "♻️ 自动选择", "🛫 自动咸鱼", "🛫 Pithecia", "🛫 游隼云",  "🚀 节点选择", "🎯 全球直连" ] },
+      { "tag": "📲 电报消息", "type": "selector", "outbounds": [ "🛫 自动咸鱼", "🛫 Pithecia", "🛫 游隼云", "🚀 节点选择", "🌐自建hy2", "🌐美国9929" ] },
+      { "tag": "🪟 微软服务", "type": "selector", "outbounds": [ "🎯 全球直连", "🌐美国9929", "♻️ 自动选择", "🛫 Pithecia", "🛫 游隼云", "🛫 自动咸鱼", "🚀 节点选择" ] },
+      { "tag": "🍎 苹果服务", "type": "selector", "outbounds": [ "🎯 全球直连", "♻️ 自动选择", "🛫 自动咸鱼", "🛫 Pithecia", "🛫 游隼云", "🚀 节点选择" ] },
+      { "tag": "🎵 TikTok", "type": "selector", "outbounds": [ "🚀 节点选择", "🛫 游隼云", "🛫 自动咸鱼", "🇬🇧 英国节点", "🇺🇸 美国节点", "🇯🇵 日韩节点", "🇸🇬 新加坡节点", "🎯 全球直连" ] },
+      { "tag": "🔒 私有网络", "type": "selector", "outbounds": [ "DIRECT" ] },
       { "tag": "🛑 广告拦截", "type": "selector", "outbounds": [ "REJECT", "DIRECT", "🚀 节点选择" ] },
-      { "tag": "🎯 全球直连", "type": "selector", "outbounds": [ "DIRECT", "REJECT", "🛫 游隼云", "🛫 Pithecia", "🛫 自动咸鱼", "♻️ 自动选择" ] },
+      { "tag": "🎯 全球直连", "type": "selector", "outbounds": [ "DIRECT", "REJECT", "🛫 自动咸鱼", "🛫 游隼云", "🛫 Pithecia", "♻️ 自动选择" ] },
       { "tag": "🛫 游隼云", "type": "selector", "providers": [ "🛫 游隼云机场" ] },
-      { "tag": "🛫 Pithecia", "type": "urltest", "tolerance": 50, "interval": "2m", "providers": [ "🛫 Pithecia机场" ] },
+      { "tag": "🛫 Pithecia", "type": "urltest", "tolerance": 50, "providers": [ "🛫 Pithecia机场" ] },
       { "tag": "🛫 自动咸鱼", "type": "urltest", "tolerance": 50, "interval": "1m", "providers": [ "🛫 咸鱼机场"]},
-
       { "tag": "🇸🇬 新加坡节点", "type": "urltest", "tolerance": 50, "use_all_providers": true, "includes": [ "(?i)新|sg|singapore" ] },
       { "tag": "🇯🇵 日韩节点", "type": "urltest", "tolerance": 50, "use_all_providers": true, "includes": [ "(?i)日本|jp|japan|韩|kr|korea" ] },
       { "tag": "🇭🇰 香港节点", "type": "urltest", "tolerance": 50, "use_all_providers": true, "includes": [ "(?i)港|hk|hongkong|hong kong" ] },
@@ -107,7 +111,7 @@
       // 自定义规则优先放前面
       {
         "domain_suffix":[
-          "uda.moe",
+          "suda.moe",
           "pithecia.com",
           "vultr.com",
           "python.org",
@@ -148,13 +152,19 @@
         ],
         "outbound": "🎯 全球直连"
       },
+      {
+        "domain_suffix":[
+          "api.mousegesturesapi.com"
+        ],
+        "outbound": "🛑 广告拦截"
+      },
       { "rule_set": [ "ads" ], "outbound": "🛑 广告拦截" },
       { "rule_set": [ "cnsite" ], "outbound": "🎯 全球直连" },  
       { "rule_set": [ "cnip" ], "outbound": "🎯 全球直连", "skip_resolve": true },
       { "rule_set": [ "ai" ], "outbound": "🤖 人工智能" }, 
       { "rule_set": [ "youtube" ], "outbound": "📺 youtube" },     
       { "rule_set": [ "steam" ], "outbound": "🎯 全球直连" },  
-      // { "rule_set": [ "private" ], "outbound": "🔒 私有网络" },
+      { "rule_set": [ "private" ], "outbound": "🔒 私有网络" },
       { "rule_set": [ "💡Github" ], "outbound": "♻️ 自动选择" },
       { "rule_set": [ "microsoft-cn" ], "outbound": "🎯 全球直连" },
       { "rule_set": [ "microsoft" ], "outbound": "🪟 微软服务" },
@@ -167,7 +177,6 @@
       { "rule_set": [ "telegramip" ], "outbound": "📲 电报消息", "skip_resolve": true },
       { "rule_set": [ "googleip" ], "outbound": "🔍 谷歌服务", "skip_resolve": true },
       { "rule_set": [ "proxy" ], "outbound": "🪜 被墙域名" }
-      
     ],
     // 规则集（binary，不设置更新时间，默认文件每天自动更新）
     "rule_set": [
@@ -176,96 +185,84 @@
         "type": "remote",
         "format": "binary",
         "path": "./ruleset/fakeip-filter.srs",
-        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/fakeip-filter.srs",
-        "download_detour": "♻️ 自动选择"
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/fakeip-filter.srs"
       },
       {
         "tag": "ads",
         "type": "remote",
         "format": "binary",
         "path": "./ruleset/ads.srs",
-        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/ads.srs",
-        "download_detour": "♻️ 自动选择"
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/ads.srs"
       },
       {
         "tag": "ai",
         "type": "remote",
         "format": "binary",
         "path": "./ruleset/ai.srs",
-        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/ai.srs",
-        "download_detour": "♻️ 自动选择"
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/ai.srs"
       },
       {
-          "tag": "steam",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/steam.srs",
-          "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/steam.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "steam",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/steam.srs",
+        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/steam.srs"
       },
       {
-          "tag": "private",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/private.srs",
-          "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/private.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "private",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/private.srs",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/private.srs"
       },
       {
-          "tag": "google",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/google.srs",
-          "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/google.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "google",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/google.srs",
+        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/google.srs"
       },
       {
-          "tag": "youtube",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/youtube.srs",
-          "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/youtube.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "youtube",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/youtube.srs",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/youtube.srs"
       },
       {
-          "tag": "microsoft-cn",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/microsoft-cn.srs",
-          "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/microsoft-cn.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "microsoft-cn",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/microsoft-cn.srs",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/microsoft-cn.srs"
       },
       {
-          "tag": "microsoft",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/microsoft.srs",
-          "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/microsoft.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "microsoft",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/microsoft.srs",
+        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/microsoft.srs"
       },
       {
-          "tag": "💡Github",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/github.srs",
-          "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/github.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "💡Github",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/github.srs",
+        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/github.srs"
       },
       {
-          "tag": "apple-cn",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/apple-cn.srs",
-          "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/apple-cn.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "apple-cn",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/apple-cn.srs",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/apple-cn.srs"
       },
       {
-          "tag": "apple",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/apple.srs",
-          "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/apple.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "apple",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/apple.srs",
+        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/apple.srs"
       },
       {
         "tag": "google-cn",
@@ -279,56 +276,49 @@
         "type": "remote",
         "format": "binary",
         "path": "./ruleset/proxy.srs",
-        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/proxy.srs",
-        "download_detour": "♻️ 自动选择"
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/proxy.srs"
       },
       {
         "tag": "telegramip",
         "type": "remote",
         "format": "binary",
         "path": "./ruleset/telegramip.srs",
-        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/telegramip.srs",
-        "download_detour": "♻️ 自动选择"
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/telegramip.srs"
       },
       {
         "tag": "googleip",
         "type": "remote",
         "format": "binary",
         "path": "./ruleset/googleip.srs",
-        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geoip/google.srs",
-        "download_detour": "♻️ 自动选择"
+        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geoip/google.srs"
       },
       {
         "tag": "nintendo",
         "type": "remote",
         "format": "binary",
         "path": "./ruleset/nintendo.srs",
-        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/nintendo.srs",
-        "download_detour": "♻️ 自动选择"
+        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/nintendo.srs"
       },
       {
         "tag": "tiktok",
         "type": "remote",
         "format": "binary",
         "path": "./ruleset/tiktok.srs",
-        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/tiktok.srs",
-        "download_detour": "♻️ 自动选择"
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/tiktok.srs"
       },
       {
-          "tag": "cnsite",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/cnsite.srs",
-          "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/cn.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "cnsite",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/cnsite.srs",
+        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geosite/cn.srs"
       },
       {
-          "tag": "cnip",
-          "type": "remote",
-          "format": "binary",
-          "path": "./ruleset/cnip.srs",
-          "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geoip/cn.srs",
-          "download_detour": "♻️ 自动选择"
+        "tag": "cnip",
+        "type": "remote",
+        "format": "binary",
+        "path": "./ruleset/cnip.srs",
+        "url": "https://github.com/MetaCubeX/meta-rules-dat/raw/sing/geo/geoip/cn.srs"
       }
     ],
     "final": "🐟 漏网之鱼",
