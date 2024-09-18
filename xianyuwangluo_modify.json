@@ -93,6 +93,121 @@
             "sniff": true
         }
     ],
+    "outbounds": [   
+        { "tag": "DIRECT", "type": "direct" },
+        { "tag": "REJECT", "type": "block" },
+        { "tag": "GLOBAL", "type": "selector", "outbounds": [ "DIRECT", "🚀 节点选择", "REJECT" ] },
+        { "tag": "dns-out", "type": "dns" },
+
+        { "tag": "🎮 任天堂", "type": "selector", "outbounds": [ "🎯 全球直连", "♻️ 自动选择", "🛫 Pithecia", "🛫 自动咸鱼", "🛫 游隼云", "🚀 节点选择", "🌐自建hy2" ] },
+        { "tag": "🐟 漏网之鱼", "type": "selector", "outbounds": [ "🛫 自动咸鱼", "🎯 全球直连", "🛫 Pithecia", "♻️ 自动选择", "🛫 游隼云", "🚀 节点选择" ] },
+        { "tag": "🚀 节点选择", "type": "selector", "default": "♻️ 自动选择", "outbounds": [ "♻️ 自动选择", "🛫 自动咸鱼", "🛫 游隼云", "🛫 Pithecia", "🇸🇬 新加坡节点", "🇭🇰 香港节点", "🌐自建hy2", "🌐美国9929", "🇹🇼 台湾节点", "🇯🇵 日韩节点", "🇬🇧 英国节点", "🇺🇸 美国节点", "🎯 全球直连" ] },
+        { "tag": "♻️ 自动选择", "type": "urltest", "tolerance": 50, "use_all_providers": true, "outbounds": [ "🌐美国9929" ] },
+        { "tag": "🔍 谷歌服务", "type": "selector", "outbounds": [ "♻️ 自动选择", "🛫 游隼云", "🛫 Pithecia", "🛫 自动咸鱼", "🚀 节点选择", "🎯 全球直连" ] },
+        { "tag": "🤖 人工智能", "type": "selector", "outbounds": [ "🚀 节点选择", "🛫 游隼云", "🇭🇰 香港节点", "🇹🇼 台湾节点", "🇯🇵 日韩节点","🇸🇬 新加坡节点", "🇺🇸 美国节点" ] },
+        { "tag": "📺 youtube", "type": "selector", "outbounds": [ "🛫 自动咸鱼", "🛫 Pithecia", "🛫 游隼云", "🌐自建hy2", "🌐美国9929", "♻️ 自动选择", "🇭🇰 香港节点", "🇹🇼 台湾节点", "🇯🇵 日韩节点","🇸🇬 新加坡节点", "🇺🇸 美国节点" ] },
+        { "tag": "🪜 被墙域名", "type": "selector", "default": "♻️ 自动选择", "outbounds": [ "♻️ 自动选择", "🛫 自动咸鱼", "🛫 Pithecia", "🛫 游隼云",  "🚀 节点选择", "🎯 全球直连" ] },
+        { "tag": "📲 电报消息", "type": "selector", "outbounds": [ "🛫 自动咸鱼", "🚀 节点选择", "🛫 游隼云", "🛫 Pithecia", "🌐自建hy2", "🌐美国9929", "🇸🇬 新加坡节点" ] },
+        { "tag": "🪟 微软服务", "type": "selector", "outbounds": [ "🎯 全球直连", "🌐美国9929", "🛫 Pithecia", "🛫 游隼云", "♻️ 自动选择", "🛫 自动咸鱼", "🚀 节点选择" ] },
+        { "tag": "🍎 苹果服务", "type": "selector", "outbounds": [ "🎯 全球直连", "🛫 Pithecia", "🛫 游隼云", "♻️ 自动选择", "🛫 自动咸鱼", "🚀 节点选择" ] },
+        { "tag": "🎵 TikTok", "type": "selector", "outbounds": [ "🚀 节点选择", "🛫 Pithecia", "🛫 游隼云", "🛫 自动咸鱼", "🇬🇧 英国节点", "🇺🇸 美国节点", "🇯🇵 日韩节点", "🇸🇬 新加坡节点", "🎯 全球直连" ] },
+        { "tag": "🛑 广告拦截", "type": "selector", "outbounds": [ "REJECT", "DIRECT" ] },
+        { "tag": "🎯 全球直连", "type": "selector", "outbounds": [ "DIRECT", "REJECT", "🛫 游隼云", "🛫 Pithecia", "🛫 自动咸鱼", "♻️ 自动选择" ] },
+        { "tag": "🛫 游隼云", "type": "selector", "providers": [ "🛫 游隼云机场" ] },
+        { "tag": "🛫 Pithecia", "type": "urltest", "tolerance": 50, "interval": "2m", "providers": [ "🛫 Pithecia机场" ] },
+        { "tag": "🛫 自动咸鱼", "type": "urltest", "tolerance": 50, "interval": "1m", "providers": [ "🛫 咸鱼机场"]},
+
+        {
+            "type": "vless",
+            "tag": "🌐美国9929",
+            "server": "209.146.101.9",
+            "server_port": 27773,
+            "uuid": "281634cd-8318-44a5-f83b-4d4087bc185c",
+            "flow": "xtls-rprx-vision",
+            "tls": {
+            "enabled": true,
+            "server_name": "qa.guru.com",
+            "utls": {
+                "enabled": true,
+                "fingerprint": "chrome"
+            },
+            "reality": {
+                "enabled": true,
+                "public_key": "g1f1wLjim5gOVGnI5LGUV0dL4iFXPoiepOPZfSxJe14"
+            }
+            },
+            "packet_encoding": ""
+        },
+        {
+            "type": "hysteria2",
+            "tag": "🌐自建hy2",
+            "server": "209.146.101.9",
+            "server_port": 28883,
+            "up_mbps": 30,
+            "down_mbps": 60,
+            "password": "jjyy524061",
+            "tls": {
+            "enabled": true,
+            "server_name": "bing.com",
+            "insecure": true,
+            "alpn": [
+                "h3"
+            ]
+            },
+            "brutal_debug": false
+        },
+
+        { "tag": "🇸🇬 新加坡节点", "type": "urltest", "tolerance": 50, "use_all_providers": true, "includes": [ "(?i)新|sg|singapore" ] },
+        { "tag": "🇯🇵 日韩节点", "type": "urltest", "tolerance": 50, "use_all_providers": true, "includes": [ "(?i)日本|jp|japan|韩|kr|korea" ] },
+        { "tag": "🇭🇰 香港节点", "type": "urltest", "tolerance": 50, "use_all_providers": true, "includes": [ "(?i)港|hk|hongkong|hong kong" ] },
+        { "tag": "🇹🇼 台湾节点", "type": "urltest", "tolerance": 50, "use_all_providers": true, "includes": [ "(?i)台|tw|taiwan" ] },
+        { "tag": "🇬🇧 英国节点", "type": "urltest", "tolerance": 50, "use_all_providers": true, "includes": [ "(?i)英国|gb|uk|united kingdom" ] },
+        { "tag": "🇺🇸 美国节点", "type": "urltest", "tolerance": 50, "use_all_providers": true, "outbounds": [ "🌐美国9929", "🌐自建hy2" ], "includes": [ "(?i)美|usa|unitedstates|united states" ] }
+    ],
+    "outbound_providers": [
+        {
+        "tag": "🛫 Pithecia机场",
+        "type": "remote",
+        "healthcheck_url": "https://www.gstatic.com/generate_204",
+        "healthcheck_interval": "60m",
+        "download_url": "https://api.ytools.cc/sub?target=clash&url=https%3A%2F%2Fapi.pithecia.com%2Fapi%2Fv1%2Fclient%2Fsubscribe%3Ftoken%3D084d853b9220e078fc2b8fa3b5a21009&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&emoji=true&list=false&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false&new_name=true&flag=clash",
+        "path": "./yamls/pithecia_airport.yaml",
+        "includes": [ "港|hk|hongkong|台|tw|taiwan|日本|jp|japan|新|sg|singapore|美|us|united states|泰|thailand|马来|mala|英|uk|unkited kingdom|韩|kr|korea|加|ca" ],
+        "excludes": "hy2|10x|x10|知识库|剩余流量|距离|到期|官网",
+        "download_ua": "clash.meta",
+        "download_interval": "48h",
+        "download_detour": "DIRECT",
+        "outbound_override": { "domain_strategy": "prefer_ipv4" }
+        },
+        {
+        "tag": "🛫 咸鱼机场",
+        "type": "remote",
+        "healthcheck_url": "https://www.gstatic.com/generate_204",
+        "healthcheck_interval": "60m",
+        "download_url": "https://api.ytools.cc/sub?target=singbox&url=https%3A%2F%2Fxianyuwangluo.one%2Fapi%2Fv1%2Fclient%2Fsubscribe%3Ftoken%3D3c4c57db27629547762a246814fec38e&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&emoji=true&list=false&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false",
+        "path": "./yamls/xianyuwangluo_airport.yaml",
+        "includes": [ "港|hk|hongkong|hong kong|台|tw|taiwan|日本|jp|japan|新|sg|singapore|美|us|unitedstates|united states|泰|thailand|马来|mala|英|uk|unkited kingdom|印|in|澳|au|韩|kr|korea" ],
+        "excludes": "10x|x10|知识库|剩余流量|距离|到期|官网",
+        "download_ua": "clash.meta",
+        "download_interval": "48h",
+        "download_detour": "DIRECT",
+        "outbound_override": { "domain_strategy": "prefer_ipv4" }
+        },
+        {
+        "tag": "🛫 游隼云机场",
+        "type": "remote",
+        "healthcheck_url": "https://www.gstatic.com/generate_204",
+        "healthcheck_interval": "60m",
+        // "download_url": "https://www.gstatic.com/generate_204",
+        "download_url": "https://api.ytools.cc/sub?target=singbox&url=https%3A%2F%2Ffalco03.438046438.xyz%2Fapi%2Fv1%2Fclient%2Fsubscribe%3Ftoken%3Dcfd7877304aa759b5831109ec5877d15&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&filename=%E6%B8%B8%E9%9A%BC%E4%BA%91&interval=86400&emoji=true&list=false&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false",
+        "path": "./yamls/falcocloud_airport.yaml",
+        "excludes": "知识库|剩余流量|距离|到期|官网",
+        "download_ua": "sing-box",
+        "download_interval": "48h",
+        "download_detour": "DIRECT",
+        "outbound_override": { "domain_strategy": "prefer_ipv4" }
+        }
+    ],
     "route": {
         "rules": [
             {
@@ -1819,7 +1934,7 @@
             },
             {
                 "domain_suffix": [
-                    "youtube",
+                    "youtube.com",
                     "youtube.ru",
                     "youtube.az",
                     "ytimg.com",
@@ -1995,6 +2110,9 @@
                     "youtube-ui.l.google.com",
                     "wide-youtube.l.google.com",
                     "ggpht.cn"
+                ],
+                "domain_keyword": [
+                    "youtube"
                 ],
                 "outbound": "📺 youtube"
             },           
